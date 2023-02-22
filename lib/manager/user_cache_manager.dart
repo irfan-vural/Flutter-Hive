@@ -1,9 +1,10 @@
+import 'package:flutter_hive/constant/hive_constants.dart';
 import 'package:flutter_hive/model/user_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class ICacheManager<T> {
   final String key;
-  Box<user_model>? _box;
+  Box<UserModel>? _box;
 
   ICacheManager(this.key);
   Future<void> init() async {
@@ -11,6 +12,7 @@ abstract class ICacheManager<T> {
     if (!(_box?.isOpen ?? false)) {
       _box = await Hive.openBox(key);
     }
+    registerAdapters();
   }
 
   void registerAdapters();
@@ -29,26 +31,26 @@ abstract class ICacheManager<T> {
   Future<void> removeItem(String key);
 }
 
-class UserCacheManager extends ICacheManager<user_model> {
+class UserCacheManager extends ICacheManager<UserModel> {
   UserCacheManager(String key) : super(key);
 
   @override
-  Future<void> addItems(List<user_model> items) async {
+  Future<void> addItems(List<UserModel> items) async {
     await _box?.addAll(items);
   }
 
   @override
-  Future<void> putItems(List<user_model> items) async {
+  Future<void> putItems(List<UserModel> items) async {
     await _box?.putAll(Map.fromEntries(items.map((e) => MapEntry(e.id, e))));
   }
 
   @override
-  user_model? getItem(String key) {
+  UserModel? getItem(String key) {
     return _box?.get(key);
   }
 
   @override
-  Future<void> putItem(String key, user_model item) async {
+  Future<void> putItem(String key, UserModel item) async {
     await _box?.put(key, item);
   }
 
@@ -58,10 +60,15 @@ class UserCacheManager extends ICacheManager<user_model> {
   }
 
   @override
-  List<user_model>? getValues() {
+  List<UserModel>? getValues() {
     return _box?.values.toList();
   }
 
   @override
-  void registerAdapters() {}
+  void registerAdapters() {
+    if (!Hive.isAdapterRegistered(HiveConstants.userTypeId)) {
+      Hive.registerAdapter(UserModelAdapter());
+      Hive.registerAdapter(CompanyAdapter());
+    }
+  }
 }

@@ -11,7 +11,7 @@ abstract class IHomeService {
     _dio = dio;
   }
 
-  Future<List<user_model>?> fetchUsers();
+  Future<List<UserModel>?> fetchUsers();
 }
 
 final _userPath = '/users';
@@ -20,13 +20,13 @@ class HomeService extends IHomeService {
   HomeService(super.dio);
 
   @override
-  Future<List<user_model>?> fetchUsers() async {
+  Future<List<UserModel>?> fetchUsers() async {
     final response = await _dio.get(_userPath);
 
     if (response.statusCode == HttpStatus.ok) {
       final responses = response.data;
       if (responses is List) {
-        return responses.map((e) => user_model.fromJson(e)).toList();
+        return responses.map((e) => UserModel.fromJson(e)).toList();
       }
     }
   }

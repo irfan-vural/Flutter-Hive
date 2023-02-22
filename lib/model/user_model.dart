@@ -1,121 +1,143 @@
-class user_model {
+import 'package:hive_flutter/adapters.dart';
+import '../constant/hive_constants.dart';
+
+part 'user_model.g.dart';
+
+@HiveType(typeId: HiveConstants.userTypeId)
+class UserModel {
+  UserModel({
+    this.id,
+    this.name,
+    this.username,
+    this.email,
+    this.address,
+    this.phone,
+    this.website,
+    this.company,
+  });
+
+  @HiveField(0)
   int? id;
+
+  @HiveField(1)
   String? name;
+  @HiveField(2)
   String? username;
+  @HiveField(3)
   String? email;
+
   Address? address;
+
+  @HiveField(4)
   String? phone;
+
+  @HiveField(5)
   String? website;
+
+  @HiveField(6)
   Company? company;
 
-  user_model(
-      {this.id,
-      this.name,
-      this.username,
-      this.email,
-      this.address,
-      this.phone,
-      this.website,
-      this.company});
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        id: json["id"] ?? json["id"],
+        name: json["name"] ?? json["name"],
+        username: json["username"] ?? json["username"],
+        email: json["email"] ?? json["email"],
+        address:
+            json["address"] == null ? null : Address.fromJson(json["address"]),
+        phone: json["phone"] ?? json["phone"],
+        website: json["website"] ?? json["website"],
+        company:
+            json["company"] == null ? null : Company.fromJson(json["company"]),
+      );
 
-  user_model.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    username = json['username'];
-    email = json['email'];
-    address =
-        json['address'] != null ? new Address.fromJson(json['address']) : null;
-    phone = json['phone'];
-    website = json['website'];
-    company =
-        json['company'] != null ? new Company.fromJson(json['company']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['username'] = this.username;
-    data['email'] = this.email;
-    if (this.address != null) {
-      data['address'] = this.address!.toJson();
-    }
-    data['phone'] = this.phone;
-    data['website'] = this.website;
-    if (this.company != null) {
-      data['company'] = this.company!.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id ?? id,
+        "name": name ?? name,
+        "username": username ?? username,
+        "email": email ?? email,
+        "address": address ?? address?.toJson(),
+        "phone": phone ?? phone,
+        "website": website ?? website,
+        "company": company ?? company?.toJson(),
+      };
 }
 
 class Address {
+  Address({
+    this.street,
+    this.suite,
+    this.city,
+    this.zipcode,
+    this.geo,
+  });
+
   String? street;
   String? suite;
   String? city;
   String? zipcode;
   Geo? geo;
 
-  Address({this.street, this.suite, this.city, this.zipcode, this.geo});
+  factory Address.fromJson(Map<String, dynamic> json) => Address(
+        street: json["street"] ?? json["street"],
+        suite: json["suite"] ?? json["suite"],
+        city: json["city"] ?? json["city"],
+        zipcode: json["zipcode"] ?? json["zipcode"],
+        geo: json["geo"] == null ? null : Geo.fromJson(json["geo"]),
+      );
 
-  Address.fromJson(Map<String, dynamic> json) {
-    street = json['street'];
-    suite = json['suite'];
-    city = json['city'];
-    zipcode = json['zipcode'];
-    geo = json['geo'] != null ? new Geo.fromJson(json['geo']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['street'] = this.street;
-    data['suite'] = this.suite;
-    data['city'] = this.city;
-    data['zipcode'] = this.zipcode;
-    if (this.geo != null) {
-      data['geo'] = this.geo!.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "street": street ?? street,
+        "suite": suite ?? suite,
+        "city": city ?? city,
+        "zipcode": zipcode ?? zipcode,
+        "geo": geo ?? geo?.toJson(),
+      };
 }
 
 class Geo {
+  Geo({
+    this.lat,
+    this.lng,
+  });
+
   String? lat;
   String? lng;
 
-  Geo({this.lat, this.lng});
+  factory Geo.fromJson(Map<String, dynamic> json) => Geo(
+        lat: json["lat"] ?? json["lat"],
+        lng: json["lng"] ?? json["lng"],
+      );
 
-  Geo.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'];
-    lng = json['lng'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['lat'] = this.lat;
-    data['lng'] = this.lng;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "lat": lat ?? lat,
+        "lng": lng ?? lng,
+      };
 }
 
+@HiveType(typeId: HiveConstants.userTypeCompanyId)
 class Company {
+  Company({
+    this.name,
+    this.catchPhrase,
+    this.bs,
+  });
+
+  @HiveField(0)
   String? name;
+  @HiveField(1)
   String? catchPhrase;
+  @HiveField(2)
   String? bs;
 
-  Company({this.name, this.catchPhrase, this.bs});
+  factory Company.fromJson(Map<String, dynamic> json) => Company(
+        name: json["name"] ?? json["name"],
+        catchPhrase: json["catchPhrase"] ?? json["catchPhrase"],
+        bs: json["bs"] ?? json["bs"],
+      );
 
-  Company.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    catchPhrase = json['catchPhrase'];
-    bs = json['bs'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['catchPhrase'] = this.catchPhrase;
-    data['bs'] = this.bs;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "name": name ?? name,
+        "catchPhrase": catchPhrase ?? catchPhrase,
+        "bs": bs ?? bs,
+      };
 }
