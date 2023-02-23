@@ -11,7 +11,7 @@ abstract class IHomeService {
   Future<List<UserModel>?> fetchUsers();
 }
 
-final _userPath = '/comments';
+final _userPath = '/posts';
 
 class HomeService extends IHomeService {
   HomeService(super.dio);
