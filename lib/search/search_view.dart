@@ -11,10 +11,10 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  final List<UserModel> _items = [];
+  List<UserModel> _items = [];
 
   void findAndSet(String key) {
-    widget.model
+    _items = widget.model
             .getValues()
             ?.where((element) =>
                 element.name?.toLowerCase().contains(key.toLowerCase()) ??
@@ -34,7 +34,7 @@ class _SearchViewState extends State<SearchView> {
           },
         ),
       ),
-      body: Text('${_items.map((e) => '${e.name} - ${e.company}').join(',')}'),
+      body: Text(_items.map((e) => '${e.name} - ${e.company}').join(',')),
     );
   }
 }

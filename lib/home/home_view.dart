@@ -4,7 +4,6 @@ import 'package:flutter_hive/home/home_view_service.dart';
 import 'package:flutter_hive/manager/user_cache_manager.dart';
 import 'package:flutter_hive/model/user_model.dart';
 import 'package:flutter_hive/search/search_view.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kartal/kartal.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,12 +14,12 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  List<UserModel>? _items;
   late final IHomeService _homeService;
   late final ICacheManager<UserModel> cacheManager;
   final String _baseUrl = 'https://jsonplaceholder.typicode.com';
   final String _dummyUrl =
       'https://fastly.picsum.photos/id/201/200/300.jpg?grayscale&hmac=BgHJjRdLh_COHXoc1t-UQZ-iPISHfWJ_kkRqeYpti4o';
-  List<UserModel>? _items;
 
   @override
   void initState() {
@@ -46,16 +45,19 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () {
                 context.navigateToPage(SearchView(model: cacheManager));
               },
-              icon: const Icon(Icons.search))
+              icon: const Icon(Icons.search_rounded))
         ],
         title: const Text('Flutter Hive Demo'),
         backgroundColor: Colors.red.shade900,
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        if (_items?.isNotEmpty ?? false) {
-          await cacheManager.addItems(_items!);
-        }
-      }),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            cacheManager.getValues();
+            if (_items?.isNotEmpty ?? false) {
+              await cacheManager.addItems(_items!);
+            }
+          },
+          child: const Icon(Icons.dangerous_sharp)),
       body: (_items?.isNotEmpty ?? false)
           ? ListView.builder(
               physics: const BouncingScrollPhysics(),
